@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
-const db = require('../db');
-const Customer = require('./Customer');
+const sequelize = require('../db');
 
-const Product = db.define('product', {
-    id: {
+const productSchema = {
+    productId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -16,6 +15,15 @@ const Product = db.define('product', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-});
+}
+
+class Product extends Sequelize.Model {
+    static init(sequelize) {
+        return super.init(productSchema, {
+            sequelize,
+            tableName: 'products'
+        });
+    }
+}
 
 module.exports = Product;

@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
 const Product = require('../models/Product');
 const Customer = require('../models/Customer');
 const { check, validationResult } = require('express-validator');
 
-// Get all products
+/**
+ * Gets all products
+ * @param  req
+ * @param  res
+ */
 router.get('/', (req, res) => {
     Product.findAll()
         .then(products => {
@@ -14,20 +17,32 @@ router.get('/', (req, res) => {
         .catch(err => console.log(err));
 });
 
-// Get single product by id
+/**
+ * Gets a single product by id
+ * @param  id
+ * @param  req
+ * @param  res
+ */
 router.get('/:id', (req, res) => {
     let { id } = req.params;
 
-    Product.findByPk(id)
-        .then(product => {
-            res.json(product);
-        }, {
-            include: [Customer]
-        })
-        .catch(err => console.log(err));
+    Product.findByPk(id, {
+        include: [{
+            model: Customer,
+            as: 'customer'
+        }]
+    }).then((product) => {
+        product ? res.json(product) : res.status(404).send();
+    });
 });
 
-// Create product
+
+
+/**
+ * Creates a product with parameters from within the body of the html request.
+ * @param  req
+ * @param  res
+ */
 router.post('/', [
 
     check('productName').isLength({ min: 5 }),
@@ -46,10 +61,13 @@ router.post('/', [
             if(customer) {
                 Product.create({
                     productName,
-                    quantity
-                }).then((product) =>
+                    quantity,
+                    customer
+                }).then((product) => {
+                    product.setCustomer(customer);
                     customer.addProduct(product)
-                        .then(res.status(200).send())
+                        .then(res.status(200).send());
+                    }
                 );
             }
             else {
@@ -59,30 +77,46 @@ router.post('/', [
     }
 });
 
-//Update product
+/**
+ * Updates a single product's parameters with new values from within the html request body.
+ * @param  id
+ * @param  req
+ * @param  res
+ */
 router.put('/:id', (req, res) => {
     let { productName, quantity } = req.body;
     let { id } = req.params;
 
     Product.findByPk(id).then( (product) => {
+        if (product) {
+            productName = productName ? productName : product.productName;
+            quantity = quantity ? quantity : product.quantity;
 
-        productName = productName ? productName : product.productName;
-        quantity = quantity ? quantity : product.quantity;
-
-        product.update({
-            productName,
-            quantity
-        }).then(res.status(200).send());
+            product.update({
+                productName,
+                quantity
+            }).then(res.status(200).send());
+        }
+        else
+            res.status(404).json({ errors: { msg: 'Product with that id not found.' } }).send();
     });
 
 });
 
-// Delete product
+/**
+ * Deletes a product by id.
+ * @param  id
+ * @param  req
+ * @param  res
+ */
 router.delete('/:id', (req, res) => {
     let { id } = req.params;
 
     Product.findByPk(id).then( (product) => {
-        product.destroy().then(res.status(204).send());
+        if(product)
+            product.destroy().then(res.status(204).send());
+        else
+            res.status(404).json({ errors: { msg: 'Product with that id not found.' } }).send();
     });
 });
 

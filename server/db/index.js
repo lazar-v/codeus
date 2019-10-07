@@ -1,4 +1,4 @@
 const Sequelize = require('sequelize');
 
-module.exports = new Sequelize('mysql://user1:password1@localhost:3306/codeus');
+module.exports = new Sequelize('postgres://codeus:codeus@localhost:5432/codeus');
 

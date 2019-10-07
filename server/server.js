@@ -1,17 +1,12 @@
 const express = require('express');
 const apiRouter = require('./routes')
 const app = express();
-const db = require('./db');
-const Product = require('./models/Product');
-const Customer = require('./models/Customer');
-
-Customer.hasMany(Product, {
-    as: 'Product'
-});
+const sequelize = require('./db');
+const models = require('./models');
 
 app.use('/api/', apiRouter);
 
-db.authenticate()
+sequelize.authenticate()
     .then( () => console.log('Database connected..'))
     .catch( err => console.log(`Error: ${err}`));
 
