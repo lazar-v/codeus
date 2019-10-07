@@ -6,8 +6,6 @@ const { check, validationResult } = require('express-validator');
 
 /**
  * Gets all products
- * @param  req
- * @param  res
  */
 router.get('/', (req, res) => {
     Product.findAll()
@@ -20,8 +18,6 @@ router.get('/', (req, res) => {
 /**
  * Gets a single product by id
  * @param  id
- * @param  req
- * @param  res
  */
 router.get('/:id', (req, res) => {
     let { id } = req.params;
@@ -40,8 +36,6 @@ router.get('/:id', (req, res) => {
 
 /**
  * Creates a product with parameters from within the body of the html request.
- * @param  req
- * @param  res
  */
 router.post('/', [
 
@@ -80,8 +74,6 @@ router.post('/', [
 /**
  * Updates a single product's parameters with new values from within the html request body.
  * @param  id
- * @param  req
- * @param  res
  */
 router.put('/:id', (req, res) => {
     let { productName, quantity } = req.body;
@@ -106,8 +98,6 @@ router.put('/:id', (req, res) => {
 /**
  * Deletes a product by id.
  * @param  id
- * @param  req
- * @param  res
  */
 router.delete('/:id', (req, res) => {
     let { id } = req.params;

@@ -6,8 +6,6 @@ const { check, validationResult } = require('express-validator');
 
 /**
  * Gets all customers.
- * @param  req
- * @param  res
  */
 router.get('/', (req, res) => {
     Customer.findAll().then((customers) => {
@@ -18,8 +16,6 @@ router.get('/', (req, res) => {
 /**
  * Gets a single customer by id.
  * @param  id
- * @param  req
- * @param  res
  */
 router.get('/:id', (req, res) => {
     let { id } = req.params;
@@ -36,8 +32,6 @@ router.get('/:id', (req, res) => {
 
 /**
  * Creates a customer based on parameters from within the html request body.
- * @param  req
- * @param  res
  */
 router.post('/', [
 
@@ -61,8 +55,6 @@ router.post('/', [
 /**
  * Updates a single customer's parameters with new values from within the html request body.
  * @param  id
- * @param  req
- * @param  res
  */
 router.put('/:id', (req, res) => {
     let { fname, lname, email } = req.body;
@@ -90,8 +82,6 @@ router.put('/:id', (req, res) => {
 /**
  * Deletes a customer by id.
  * @param  id
- * @param  req
- * @param  res
  */
 router.delete('/:id', (req, res) => {
     let { id } = req.params;
