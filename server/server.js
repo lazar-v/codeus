@@ -3,7 +3,11 @@ const apiRouter = require('./routes')
 const app = express();
 const sequelize = require('./db');
 const models = require('./models');
+const compression = require('compression');
+const helmet = require('helmet');
 
+app.use(helmet());
+app.use(compression());
 app.use('/api/', apiRouter);
 
 sequelize.authenticate()
