@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
+    "start": "node server/server.js -w server",
     "dev": "nodemon server/server.js -w server"
   },
   "author": "",
